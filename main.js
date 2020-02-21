@@ -2,13 +2,17 @@
 document.addEventListener('DOMContentLoaded',function(){
     var canvas = document.getElementById('cv');
     var context = canvas.getContext('2d');
-
-
     
     let smallRadius = 20;
     let bigRadius = 30;
+    let figurePos = {
+        x: 150,
+        y: 150,
+    }
+
     print(smallRadius,bigRadius);
 
+    let arr = [];
     document.querySelector('.smallButton').addEventListener('click',function(){
         smallRadius = document.querySelector('.small').value;
         context.clearRect(0, 0, canvas.width, canvas.height);
@@ -25,15 +29,9 @@ document.addEventListener('DOMContentLoaded',function(){
 
     function print(smallRadius,bigRadius){
         
-
         context.lineWidth = 5;
         context.strokeStyle = "black";
-        
-        
-        let figurePos = {
-            x: 150,
-            y: 150,
-        }
+              
 
     
         // main figure 
@@ -52,8 +50,6 @@ document.addEventListener('DOMContentLoaded',function(){
         context.font = '9px Arial';
 
 
-        // 150 75
-        
         //center circle small
         context.beginPath();
         for(var angle = 0; angle <= 2 * Math.PI; angle += step) {

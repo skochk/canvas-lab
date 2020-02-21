@@ -1,0 +1,11 @@
+.row{
+    display: flex;
+}
+
+input.big::placeholder{
+    color:lime;
+}
+
+input.small::placeholder{
+    color:blue;
+}
