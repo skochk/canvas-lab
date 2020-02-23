@@ -9,30 +9,30 @@ document.addEventListener('DOMContentLoaded',function(){
         x: 150,
         y: 150,
     }
-
+  
     
     let a = calcArray(smallRadius,bigRadius);
-
     print(a);
 
-    document.querySelector('.smallButton').addEventListener('click',function(){
+    document.querySelector('.smallButton').addEventListener('click',async function(){
         smallRadius = document.querySelector('.small').value;
-        context.clearRect(0, 0, canvas.width, canvas.height);
-        let a = calcArray(smallRadius,bigRadius);
-        print(a);
+        await context.clearRect(0, 0, canvas.width, canvas.height);
+        let a = await calcArray(smallRadius,bigRadius);
+        await print(a);
     });
 
-    document.querySelector('.bigButton').addEventListener('click', function(){
+    document.querySelector('.bigButton').addEventListener('click', async function(){
         bigRadius = document.querySelector('.big').value;
-        context.clearRect-(0, 0, canvas.width, canvas.height);
-        let a = calcArray(smallRadius,bigRadius);
-        print(a);
+        await context.clearRect(0, 0, canvas.width, canvas.height);
+        let a = await calcArray(smallRadius,bigRadius);
+        await print(a);
 
     })
 
 
 
     function print(a){
+
         context.beginPath();
         context.lineWidth = 5;
         for(let i = 0; i < a.length; i++){
@@ -49,12 +49,9 @@ document.addEventListener('DOMContentLoaded',function(){
         
     }
 
+
     function calcArray(smallRadius,bigRadius){
         let arr = [];
-        // context.lineWidth = 5;
-        // context.strokeStyle = "black";
-      
-        // arr.push("move");
         arr.push([figurePos.x-50, figurePos.y-25,"move"])
         arr.push([figurePos.x,figurePos.y-50]);
         arr.push([figurePos.x+50,figurePos.y-25]);
@@ -62,29 +59,17 @@ document.addEventListener('DOMContentLoaded',function(){
         arr.push([figurePos.x,figurePos.y+50]);
         arr.push([figurePos.x-50,figurePos.y+25]);
         arr.push([figurePos.x-50,figurePos.y-27]);
-        // context.stroke();
-
 
         var step = 2 * Math.PI / 20; // примечание 2 
         let Xpos, Ypos;
-        // context.font = '9px Arial';
 
-
-        //center circle small
-        // context.beginPath();
         arr.push([Math.cos(0) * smallRadius+figurePos.x, Math.sin(0) * smallRadius+figurePos.y ,"move" ]);
         for(var angle = 0; angle <= 2 * Math.PI; angle += step) {
             Xpos = Math.cos(angle) * smallRadius;
             Ypos = Math.sin(angle) * smallRadius;   
-            // context.lineTo(Xpos+figurePos.x,Ypos+figurePos.y);
             arr.push([Xpos+figurePos.x,Ypos+figurePos.y]);
         }
-        // context.stroke();
 
-
-
-        //center bottom small circle
-        // context.beginPath();
         arr.push([Math.cos(- 1/7 * Math.PI) * smallRadius+figurePos.x, Math.sin(- 1/7 * Math.PI) * smallRadius+figurePos.y + 50  ,"move"]);
         for(var angle = - 1/7 * Math.PI; angle <= 10/8 * Math.PI; angle += step) {
             Xpos = Math.cos(angle) * smallRadius;
@@ -92,46 +77,28 @@ document.addEventListener('DOMContentLoaded',function(){
             // context.lineTo(Xpos+figurePos.x,Ypos+figurePos.y+50);    
             arr.push([Xpos+figurePos.x,Ypos+figurePos.y+50]);
         }
-        // context.stroke();
-        
-        
-        //top circle
-        // context.beginPath();
+
        arr.push([Math.cos(7/8 * Math.PI)  * smallRadius + figurePos.x,   Math.sin(7/8 * Math.PI) * smallRadius+figurePos.y-50  ,"move"]);
         for(var angle = 7/8 * Math.PI; angle <= 22/10 * Math.PI; angle += step) {
             Xpos = Math.cos(angle) * smallRadius;
             Ypos = Math.sin(angle) * smallRadius;
-            // context.lineTo(Xpos+figurePos.x,Ypos+figurePos.y-50);
             arr.push([Xpos+figurePos.x,Ypos+figurePos.y-50])
         }
-        // context.stroke();
 
-
-        //left big circle
-        // context.beginPath();
         arr.push([Math.cos(1/13 * Math.PI)  * smallRadius + figurePos.x - 50,   Math.sin(1/13 * Math.PI) * smallRadius+figurePos.y+30 ,"move"]);
         for(var angle = 1/13 * Math.PI; angle <= 3/2 * Math.PI; angle += step) {
             Xpos = Math.cos(angle) * bigRadius;
             Ypos = Math.sin(angle) * bigRadius;
-            // context.lineTo(Xpos+figurePos.x-50,Ypos+figurePos.y+30);
             arr.push([Xpos+figurePos.x-50,Ypos+figurePos.y+30]);
            
         }
-        // context.stroke();
 
-            
-        //right big circle
-        // context.beginPath();
         arr.push([Math.cos(-1/2 * Math.PI)  * smallRadius + figurePos.x + 50,   Math.sin(-1/2 * Math.PI) * smallRadius+figurePos.y+30 ,"move"]);
         for(var angle = -1/2 * Math.PI; angle <= 9/10 * Math.PI; angle += step) {
             Xpos = Math.cos(angle) * bigRadius;
             Ypos = Math.sin(angle) * bigRadius;
-            // context.lineTo(Xpos+figurePos.x+50,Ypos+figurePos.y+30);
             arr.push([Xpos+figurePos.x+50,Ypos+figurePos.y+30]);
         } 
-        // context.stroke();
-        // context.beginPath();
-
         return arr;
 
     }
