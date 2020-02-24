@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded',function(){
         y: 150,
     }
   
-    
+    drawGrid();
     let a = calcArray(smallRadius,bigRadius);
     print(a);
 
@@ -18,13 +18,16 @@ document.addEventListener('DOMContentLoaded',function(){
         smallRadius = document.querySelector('.small').value;
         await context.clearRect(0, 0, canvas.width, canvas.height);
         let a = await calcArray(smallRadius,bigRadius);
+        await drawGrid();
         await print(a);
+        
     });
 
     document.querySelector('.bigButton').addEventListener('click', async function(){
         bigRadius = document.querySelector('.big').value;
         await context.clearRect(0, 0, canvas.width, canvas.height);
         let a = await calcArray(smallRadius,bigRadius);
+        await drawGrid();
         await print(a);
 
     })
@@ -32,21 +35,20 @@ document.addEventListener('DOMContentLoaded',function(){
 
 
     function print(a){
-
         context.beginPath();
         context.lineWidth = 5;
         for(let i = 0; i < a.length; i++){
             if(a[i][2] == "move"){
-                context.stroke();
                 context.moveTo(a[i][0],a[i][1]);
+                context.lineTo(a[i][0],a[i][1]);
             }else{
                 context.lineTo(a[i][0],a[i][1]);
+                context.stroke();
             }
             context.stroke();
         }
         context.stroke();
-        context.closePath();
-        
+
     }
 
 
@@ -74,7 +76,6 @@ document.addEventListener('DOMContentLoaded',function(){
         for(var angle = - 1/7 * Math.PI; angle <= 10/8 * Math.PI; angle += step) {
             Xpos = Math.cos(angle) * smallRadius;
             Ypos = Math.sin(angle) * smallRadius;
-            // context.lineTo(Xpos+figurePos.x,Ypos+figurePos.y+50);    
             arr.push([Xpos+figurePos.x,Ypos+figurePos.y+50]);
         }
 
@@ -103,27 +104,36 @@ document.addEventListener('DOMContentLoaded',function(){
 
     }
 
-    // vertical grid loop
-// for(let i = 0.5; i<canvas.offsetWidth; i=i+20){
-//     context.lineWidth = 1;
-//     context.strokeStyle = "black";
-//     context.moveTo(i,0);
-//     context.fillText(i-0.5,i+5,10);
-//     context.lineTo(i,canvas.offsetHeight);
-//     context.stroke();
-    
-//     }
-//     // horizontal grid loop
-//     for(let i = 0.5; i<canvas.offsetWidth; i=i+20){
-//     context.lineWidth = 1;
-//     context.strokeStyle = "black";
-//     context.moveTo(0,i);
-//     context.fillText(i-0.5,1,i+10);
-//     context.lineTo(canvas.offsetWidth,i);
-    
-//     context.stroke();
-//     }
-    
+
+
+    function drawGrid(){
+        context.beginPath();
+        context.lineWidth = 1;
+        //     vertical grid loop
+        for(let i = 0.5; i<canvas.offsetWidth; i=i+20){
+            context.lineWidth = 1;
+            context.strokeStyle = "black";
+            context.moveTo(i,0);
+            context.fillText(i-0.5,i+5,10);
+            context.lineTo(i,canvas.offsetHeight);
+            context.stroke();
+        }
+        // horizontal grid loop
+        context.beginPath();
+        context.lineWidth = 1;
+        for(let i = 0.5; i<canvas.offsetWidth; i=i+20){
+            context.lineWidth = 1;
+            context.strokeStyle = "black";
+            context.moveTo(0,i);
+            context.fillText(i-0.5,1,i+10);
+            context.lineTo(canvas.offsetWidth,i);
+            context.stroke();
+        }
+        context.closePath();
+
+
+    }
+        
  
 
 
