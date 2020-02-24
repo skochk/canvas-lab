@@ -14,10 +14,32 @@ document.addEventListener('DOMContentLoaded',function(){
     let a = calcArray(smallRadius,bigRadius);
     print(a);
 
-    canvas.addEventListener('mousemove', async function(e){
-        console.log(e.clientX,e.clientY);
+    let moveOnClick = false;
 
+    document.querySelector('.moveState').addEventListener('click',function(){
+        moveOnClick = !moveOnClick; //change to opposite state
+        if(moveOnClick){
+            document.querySelector('.moveState').innerHTML = 'disable move of detail on click';
+        }else{
+            document.querySelector('.moveState').innerHTML = 'allow move of detail on click'; 
+        }
+        console.log(moveOnClick);
+    })
+    canvas.addEventListener('mousemove', async function(e){
+        canvas.addEventListener('click',function(e){
+            if(moveOnClick == true){
+                context.clearRect(0, 0, canvas.width, canvas.height);
+                let a = calcArray(smallRadius,bigRadius);
+                drawGrid();
+                figurePos.x = e.clientX;
+                figurePos.y = e.clientY;
+                print(a);
+            }
+        });
     });
+
+
+    
 
     document.querySelector('.smallButton').addEventListener('click',async function(){
         smallRadius = document.querySelector('.small').value;
@@ -59,13 +81,13 @@ document.addEventListener('DOMContentLoaded',function(){
 
     function calcArray(smallRadius,bigRadius){
         let arr = [];
-        arr.push([figurePos.x-50, figurePos.y-25,"move"])
-        arr.push([figurePos.x,figurePos.y-50]);
-        arr.push([figurePos.x+50,figurePos.y-25]);
-        arr.push([figurePos.x+50,figurePos.y+25]);
-        arr.push([figurePos.x,figurePos.y+50]);
-        arr.push([figurePos.x-50,figurePos.y+25]);
-        arr.push([figurePos.x-50,figurePos.y-27]);
+        // arr.push([figurePos.x-50, figurePos.y-25,"move"])
+        // arr.push([figurePos.x,figurePos.y-50]);
+        // arr.push([figurePos.x+50,figurePos.y-25]);
+        // arr.push([figurePos.x+50,figurePos.y+25]);
+        // arr.push([figurePos.x,figurePos.y+50]);
+        // arr.push([figurePos.x-50,figurePos.y+25]);
+        // arr.push([figurePos.x-50,figurePos.y-27]);
 
         var step = 2 * Math.PI / 20; // примечание 2 
         let Xpos, Ypos;
@@ -91,7 +113,7 @@ document.addEventListener('DOMContentLoaded',function(){
             arr.push([Xpos+figurePos.x,Ypos+figurePos.y-50])
         }
         //left big circle
-        arr.push([Math.cos(1/13 * Math.PI)  * smallRadius + figurePos.x - 50,   Math.sin(1/13 * Math.PI) * smallRadius+figurePos.y+30 ,"move"]);
+        arr.push([Math.cos(1/13 * Math.PI)  * smallRadius + figurePos.x - 40,   Math.sin(1/13 * Math.PI) * smallRadius+figurePos.y+30 ,"move"]);
         for(var angle = 1/13 * Math.PI; angle <= 3/2 * Math.PI; angle += step) {
             Xpos = Math.cos(angle) * bigRadius;
             Ypos = Math.sin(angle) * bigRadius;
@@ -99,7 +121,7 @@ document.addEventListener('DOMContentLoaded',function(){
            
         }
         //right big circle
-        arr.push([Math.cos(-1/2 * Math.PI)  * smallRadius + figurePos.x + 50,   Math.sin(-1/2 * Math.PI) * smallRadius+figurePos.y+30 ,"move"]);
+        arr.push([Math.cos(-1/2 * Math.PI)  * smallRadius + figurePos.x + 50,   Math.sin(-1/2 * Math.PI) * smallRadius+figurePos.y+20 ,"move"]);
         for(var angle = -1/2 * Math.PI; angle <= 9/10 * Math.PI; angle += step) {
             Xpos = Math.cos(angle) * bigRadius;
             Ypos = Math.sin(angle) * bigRadius;
@@ -151,7 +173,7 @@ document.addEventListener('DOMContentLoaded',function(){
 			context.lineTo(20, canvas.offsetHeight/1.1);
             context.stroke();
             context.fillText("Y",40, canvas.offsetHeight/1.1)
-            console.log(canvas.offsetWidth/1.1);
+
 
             //X Start line
 			context.lineWidth = 3;
@@ -161,7 +183,7 @@ document.addEventListener('DOMContentLoaded',function(){
 			context.lineTo(canvas.offsetWidth/1.1, 20);
             context.stroke();
             context.fillText("X",canvas.offsetWidth/1.1, 50)
-            console.log(canvas.offsetWidth/1.1);
+
 			
 
     }
