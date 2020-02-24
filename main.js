@@ -14,6 +14,11 @@ document.addEventListener('DOMContentLoaded',function(){
     let a = calcArray(smallRadius,bigRadius);
     print(a);
 
+    canvas.addEventListener('mousemove', async function(e){
+        console.log(e.clientX,e.clientY);
+
+    });
+
     document.querySelector('.smallButton').addEventListener('click',async function(){
         smallRadius = document.querySelector('.small').value;
         await context.clearRect(0, 0, canvas.width, canvas.height);
@@ -64,28 +69,28 @@ document.addEventListener('DOMContentLoaded',function(){
 
         var step = 2 * Math.PI / 20; // примечание 2 
         let Xpos, Ypos;
-
+        //center circle small
         arr.push([Math.cos(0) * smallRadius+figurePos.x, Math.sin(0) * smallRadius+figurePos.y ,"move" ]);
         for(var angle = 0; angle <= 2 * Math.PI; angle += step) {
             Xpos = Math.cos(angle) * smallRadius;
             Ypos = Math.sin(angle) * smallRadius;   
             arr.push([Xpos+figurePos.x,Ypos+figurePos.y]);
         }
-
+        //center bottom small circle    
         arr.push([Math.cos(- 1/7 * Math.PI) * smallRadius+figurePos.x, Math.sin(- 1/7 * Math.PI) * smallRadius+figurePos.y + 50  ,"move"]);
         for(var angle = - 1/7 * Math.PI; angle <= 10/8 * Math.PI; angle += step) {
             Xpos = Math.cos(angle) * smallRadius;
             Ypos = Math.sin(angle) * smallRadius;
             arr.push([Xpos+figurePos.x,Ypos+figurePos.y+50]);
         }
-
+        //top circle
        arr.push([Math.cos(7/8 * Math.PI)  * smallRadius + figurePos.x,   Math.sin(7/8 * Math.PI) * smallRadius+figurePos.y-50  ,"move"]);
         for(var angle = 7/8 * Math.PI; angle <= 22/10 * Math.PI; angle += step) {
             Xpos = Math.cos(angle) * smallRadius;
             Ypos = Math.sin(angle) * smallRadius;
             arr.push([Xpos+figurePos.x,Ypos+figurePos.y-50])
         }
-
+        //left big circle
         arr.push([Math.cos(1/13 * Math.PI)  * smallRadius + figurePos.x - 50,   Math.sin(1/13 * Math.PI) * smallRadius+figurePos.y+30 ,"move"]);
         for(var angle = 1/13 * Math.PI; angle <= 3/2 * Math.PI; angle += step) {
             Xpos = Math.cos(angle) * bigRadius;
@@ -93,7 +98,7 @@ document.addEventListener('DOMContentLoaded',function(){
             arr.push([Xpos+figurePos.x-50,Ypos+figurePos.y+30]);
            
         }
-
+        //right big circle
         arr.push([Math.cos(-1/2 * Math.PI)  * smallRadius + figurePos.x + 50,   Math.sin(-1/2 * Math.PI) * smallRadius+figurePos.y+30 ,"move"]);
         for(var angle = -1/2 * Math.PI; angle <= 9/10 * Math.PI; angle += step) {
             Xpos = Math.cos(angle) * bigRadius;
@@ -109,12 +114,12 @@ document.addEventListener('DOMContentLoaded',function(){
     function drawGrid(){
         context.beginPath();
         context.lineWidth = 1;
-        //     vertical grid loop
+        //  vertical grid loop
         for(let i = 0.5; i<canvas.offsetWidth; i=i+20){
             context.lineWidth = 1;
             context.strokeStyle = "black";
             context.moveTo(i,0);
-            context.fillText(i-0.5,i+5,10);
+            context.fillText((i-0.5)/10,i+5,10);
             context.lineTo(i,canvas.offsetHeight);
             context.stroke();
         }
@@ -125,12 +130,75 @@ document.addEventListener('DOMContentLoaded',function(){
             context.lineWidth = 1;
             context.strokeStyle = "black";
             context.moveTo(0,i);
-            context.fillText(i-0.5,1,i+10);
+            context.fillText((i-0.5)/10,1,i+10);
             context.lineTo(canvas.offsetWidth,i);
             context.stroke();
         }
         context.closePath();
 
+        //coordinates line
+			context.font = "40px Segoe UI";
+			context.textAlign = "center";
+			
+			//Y Start line
+			context.lineWidth = 3;
+			context.strokeStyle = "black";
+			context.beginPath();
+			context.moveTo(20, 20);
+			context.lineTo(20, canvas.offsetHeight/1.1);
+            context.stroke();
+            context.font = '10px serif bold';
+            context.fillText("Y",40, canvas.offsetHeight/1.1)
+            console.log(canvas.offsetWidth/1.1);
+
+            //X Start line
+			context.lineWidth = 3;
+			context.strokeStyle = "black";
+			context.beginPath();
+			context.moveTo(19, 20);
+			context.lineTo(canvas.offsetWidth/1.1, 20);
+            context.stroke();
+            context.font = '10px serif bold';
+            context.fillText("X",canvas.offsetWidth/1.1, 50)
+            console.log(canvas.offsetWidth/1.1);
+			
+			// //X arrow
+			// context.beginPath();
+			// context.moveTo(canvas.offsetWidth, canvas.offsetTop);
+			// context.lineTo(canvas.offsetWidth, canvas.offsetTop - 5);
+			// context.lineTo(canvas.offsetWidth + 15, canvas.offsetTop);
+			// context.lineTo(canvas.offsetWidth, canvas.offsetTop + 5);
+			// context.closePath();
+			// context.fill();
+			// context.stroke();
+			
+			// //подпись х
+			// context.font = "40px Segoe UI";
+			// context.fillText("x", canvas.offsetWidth, canvas.offsetTop - 10); 
+			
+			// //--------------------------------------------------------------------------------------
+			
+			// //линия стрелки у
+			// context.lineWidth = 5;
+			// context.strokeStyle = "black";
+			// context.beginPath();
+			// context.moveTo(y_lineLeft, y_lineTop);
+			// context.lineTo(y_lineTop, y_lineLength);
+			// context.stroke();
+			
+			// //нос стрелки у
+			// context.beginPath();
+			// context.moveTo(y_lineTop, y_lineLength);
+			// context.lineTo(y_lineTop - 5, y_lineLength,);
+			// context.lineTo(canvas.offsetTop, y_lineLength + 15);
+			// context.lineTo(y_lineTop + 5, y_lineLength);
+			// context.closePath();
+			// context.fill();
+			// context.stroke();
+			
+			// //подпись х
+			// context.font = "40px Segoe UI";
+			// context.fillText("y", y_lineTop - 20, y_lineLength + 10); 
 
     }
         

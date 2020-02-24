@@ -9,3 +9,7 @@ input.big::placeholder{
 input.small::placeholder{
     color:blue;
 }
+
+body{
+    padding: 10px;
+}
