@@ -16,17 +16,32 @@ document.addEventListener('DOMContentLoaded',function(){
 
     let moveOnClick = false;
 
-    document.querySelector('.moveState').addEventListener('click',function(){
-        moveOnClick = !moveOnClick; //change to opposite state
-        if(moveOnClick){
-            document.querySelector('.moveState').innerHTML = 'disable move of detail on click';
-        }else{
-            document.querySelector('.moveState').innerHTML = 'allow move of detail on click'; 
+    //old move version
+
+    // document.querySelector('.moveState').addEventListener('click',function(){
+    //     moveOnClick = !moveOnClick; //change to opposite state
+    //     if(moveOnClick){
+    //         document.querySelector('.moveState').innerHTML = 'disable move of detail on click';
+    //     }else{
+    //         document.querySelector('.moveState').innerHTML = 'allow move of detail on click'; 
+    //     }
+    //     console.log(moveOnClick);
+    // });
+
+    canvas.addEventListener('mousedown',function(e){
+        if((e.clientX > figurePos.x - 70 &&  e.clientY > figurePos.y -50)&&
+           (e.clientX < figurePos.x + 70 &&  e.clientY < figurePos.y +100)
+        ){
+            moveOnClick = true;
         }
-        console.log(moveOnClick);
     })
+    canvas.addEventListener('mouseup',function(){
+        moveOnClick = false;
+    })
+
+
     canvas.addEventListener('mousemove', async function(e){
-        canvas.addEventListener('click',function(e){
+        // canvas.addEventListener('click',function(e){
             if(moveOnClick == true){
                 context.clearRect(0, 0, canvas.width, canvas.height);
                 let a = calcArray(smallRadius,bigRadius);
@@ -35,7 +50,7 @@ document.addEventListener('DOMContentLoaded',function(){
                 figurePos.y = e.clientY;
                 print(a);
             }
-        });
+        // });
     });
 
 
@@ -81,13 +96,13 @@ document.addEventListener('DOMContentLoaded',function(){
 
     function calcArray(smallRadius,bigRadius){
         let arr = [];
-        // arr.push([figurePos.x-50, figurePos.y-25,"move"])
-        // arr.push([figurePos.x,figurePos.y-50]);
-        // arr.push([figurePos.x+50,figurePos.y-25]);
-        // arr.push([figurePos.x+50,figurePos.y+25]);
-        // arr.push([figurePos.x,figurePos.y+50]);
-        // arr.push([figurePos.x-50,figurePos.y+25]);
-        // arr.push([figurePos.x-50,figurePos.y-27]);
+        arr.push([figurePos.x-50, figurePos.y-25,"move"])
+        arr.push([figurePos.x,figurePos.y-50]);
+        arr.push([figurePos.x+50,figurePos.y-25]);
+        arr.push([figurePos.x+50,figurePos.y+25]);
+        arr.push([figurePos.x,figurePos.y+50]);
+        arr.push([figurePos.x-50,figurePos.y+25]);
+        arr.push([figurePos.x-50,figurePos.y-27]);
 
         var step = 2 * Math.PI / 20; // примечание 2 
         let Xpos, Ypos;
