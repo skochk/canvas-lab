@@ -114,7 +114,9 @@ document.addEventListener('DOMContentLoaded',function(){
     function drawGrid(){
         context.beginPath();
         context.lineWidth = 1;
-        //  vertical grid loop
+        context.font = "10px Segoe UI";
+        context.textAlign = "left";
+        //     vertical grid loop
         for(let i = 0.5; i<canvas.offsetWidth; i=i+20){
             context.lineWidth = 1;
             context.strokeStyle = "black";
@@ -123,6 +125,7 @@ document.addEventListener('DOMContentLoaded',function(){
             context.lineTo(i,canvas.offsetHeight);
             context.stroke();
         }
+        context.closePath();
         // horizontal grid loop
         context.beginPath();
         context.lineWidth = 1;
@@ -147,7 +150,6 @@ document.addEventListener('DOMContentLoaded',function(){
 			context.moveTo(20, 20);
 			context.lineTo(20, canvas.offsetHeight/1.1);
             context.stroke();
-            context.font = '10px serif bold';
             context.fillText("Y",40, canvas.offsetHeight/1.1)
             console.log(canvas.offsetWidth/1.1);
 
@@ -158,47 +160,9 @@ document.addEventListener('DOMContentLoaded',function(){
 			context.moveTo(19, 20);
 			context.lineTo(canvas.offsetWidth/1.1, 20);
             context.stroke();
-            context.font = '10px serif bold';
             context.fillText("X",canvas.offsetWidth/1.1, 50)
             console.log(canvas.offsetWidth/1.1);
 			
-			// //X arrow
-			// context.beginPath();
-			// context.moveTo(canvas.offsetWidth, canvas.offsetTop);
-			// context.lineTo(canvas.offsetWidth, canvas.offsetTop - 5);
-			// context.lineTo(canvas.offsetWidth + 15, canvas.offsetTop);
-			// context.lineTo(canvas.offsetWidth, canvas.offsetTop + 5);
-			// context.closePath();
-			// context.fill();
-			// context.stroke();
-			
-			// //подпись х
-			// context.font = "40px Segoe UI";
-			// context.fillText("x", canvas.offsetWidth, canvas.offsetTop - 10); 
-			
-			// //--------------------------------------------------------------------------------------
-			
-			// //линия стрелки у
-			// context.lineWidth = 5;
-			// context.strokeStyle = "black";
-			// context.beginPath();
-			// context.moveTo(y_lineLeft, y_lineTop);
-			// context.lineTo(y_lineTop, y_lineLength);
-			// context.stroke();
-			
-			// //нос стрелки у
-			// context.beginPath();
-			// context.moveTo(y_lineTop, y_lineLength);
-			// context.lineTo(y_lineTop - 5, y_lineLength,);
-			// context.lineTo(canvas.offsetTop, y_lineLength + 15);
-			// context.lineTo(y_lineTop + 5, y_lineLength);
-			// context.closePath();
-			// context.fill();
-			// context.stroke();
-			
-			// //подпись х
-			// context.font = "40px Segoe UI";
-			// context.fillText("y", y_lineTop - 20, y_lineLength + 10); 
 
     }
         
