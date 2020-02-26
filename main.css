@@ -1,29 +1,32 @@
-.row{
-    display: flex;
-}
-/* 
-input.big::placeholder{
-    color:lime;
-}
-
-input.small::placeholder{
-    color:blue;
-} */
 
 body{
-    padding: 10px;
+    margin: 0;
+    padding: 0;
 }
 
-.kek{
-    display:flex;
-    /* justify-content: center; */
-    align-items: center;
-    margin: 0;
-}
 h1{
     font-size: 0.9em;
-    margin-right:10px;
+    margin: 0;
+    padding: 0;
+    font: Arial sans-serif;
 }
-button{
+.labs{
+    margin-top: 20px;
+    display:flex;
+    flex-direction: row;
+    align-items: flex-start;
+    margin: 0;
+    padding: 0;
+    width: 1000px;
+}
+.lab0, .lab1{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: flex-start;
     margin-right: 50px;
+}
+
+.lab0_row{
+    display: flex;
 }

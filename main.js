@@ -16,8 +16,23 @@ document.addEventListener('DOMContentLoaded',function(){
 
     let moveOnClick = false;
 
+    
+    document.querySelector('.moveByXY').addEventListener('click',function(){
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        drawGrid();
+        let addToX = document.querySelector('.moveOnXaxis').value;
+        let addToY = document.querySelector('.moveOnYaxis').value;
+        if(addToX){
+            figurePos.x += parseInt(addToX);
+        }
+        if(addToY){
+            figurePos.y += parseInt(addToY);
+        }
+        let a = calcArray(smallRadius,bigRadius);
+        print(a);
+    })
 
-    //move figure
+    //move figure by cursor
     canvas.addEventListener('mousedown',function(e){
         if((e.clientX > figurePos.x - 70 &&  e.clientY > figurePos.y -50)&&
            (e.clientX < figurePos.x + 70 &&  e.clientY < figurePos.y +100)
@@ -38,22 +53,24 @@ document.addEventListener('DOMContentLoaded',function(){
                 print(a);
             }
     });
-    let changingPoint = true;
+
+    let changingPoint = false;
     let rotationCenter = {
         x: 150,
         y: 150
     }
+
     document.querySelector('.centerCoords').addEventListener('click',function(){
         changingPoint = !changingPoint;
         console.log(changingPoint);
         if(!changingPoint){
-            document.querySelector('.centerCoords').innerHTML = "click to change XY point";
+            document.querySelector('.centerCoords').innerHTML = "set Z point by cursor";
         }else{
-            document.querySelector('.centerCoords').innerHTML = "stop changing XY point";
+            document.querySelector('.centerCoords').innerHTML = "stop changing Z point";
         }
     }); 
 
-    // set Z point
+    // set Z point by cursor
     canvas.addEventListener('click',function(e){
         if(changingPoint){
             rotationCenter.x = e.clientX;
@@ -66,6 +83,16 @@ document.addEventListener('DOMContentLoaded',function(){
             
         }
     });
+    //set Z point by values
+    document.querySelector('.setXY').addEventListener('click', function(){
+        rotationCenter.x = document.querySelector('.centerX').value;
+        rotationCenter.y = document.querySelector('.centerY').value;
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        drawGrid();
+        let array = calcArray(smallRadius,bigRadius);
+        print(array);
+        drawPoint(parseInt(rotationCenter.x),parseInt(rotationCenter.y));
+    })
 
     //rotate
     document.querySelector('.rotate').addEventListener('click', function(){
@@ -121,7 +148,6 @@ document.addEventListener('DOMContentLoaded',function(){
         context.stroke();
 
     }
-
 
     function calcArray(smallRadius,bigRadius){
         let arr = [];
@@ -204,7 +230,8 @@ document.addEventListener('DOMContentLoaded',function(){
             context.lineWidth = 1;
             context.strokeStyle = "black";
             context.moveTo(i,0);
-            context.fillText((i-0.5)/10,i+10,15);
+            context.font = "8px Arial";
+            context.fillText((i-0.5),i+5,15);
             context.lineTo(i,canvas.offsetHeight);
             context.stroke();
         }
@@ -216,7 +243,8 @@ document.addEventListener('DOMContentLoaded',function(){
             context.lineWidth = 1;
             context.strokeStyle = "black";
             context.moveTo(0,i);
-            context.fillText((i-0.5)/10,10,i+10);
+            context.font = "8px Arial";
+            context.fillText((i-0.5),8,i+10);
             context.lineTo(canvas.offsetWidth,i);
             context.stroke();
         }
@@ -250,16 +278,18 @@ document.addEventListener('DOMContentLoaded',function(){
     }
     
     function drawPoint(x,y){
+        console.log(x,y);
         //center of axis of rotation
         context.beginPath();
-        context.arc(x, y-35.65, 5, 0, 2 * Math.PI);
+        context.arc(x, y, 5, 0, 2 * Math.PI);
         context.font = "20px Arial";
-        context.fillText('Z',x+20,y-25);
+        context.fillText('Z',x+20,y+25);
         context.fillStyle = "black";
         context.fill();
     }
         
- 
 
-
+    // document.querySelector('.pic').addEventListener('click',function(){
+    //     document.querySelector('img').style.display = "none";
+    // })
 });

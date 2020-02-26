@@ -6,17 +6,38 @@
 	<link rel="stylesheet" href="./main.css"></style>
 </head>
 <body style="margin: 0">
-	<div class="kek">
-		
-		<h1>R1:</h1><input placeholder="set R1 radius" type="number" class="small"> <button class="smallButton">set</button>
-		<H1>R2:</H1><input placeholder="set R2 radius"  type="number" class="big"> <button class="bigButton">set</button>
-		<button class="centerCoords">stop changing XY point</button>
-		<H1>angle for rotation:</H1><input placeholder="" value="90" type="number" class="rotateAngle">
-		<button class="rotate">click to rotate</button>
-	</div>
 	<div class="row">
 		<canvas id="cv" style="display: block;" width="800" height="300">sss</canvas>
-		<img src="pic2.png">
 	</div>
+	<div class="labs">
+		<div class="lab0">
+			<h1>lab 0:</h1>
+			<div class="lab0_row"><h1>R1:</h1><input placeholder="set R1 radius" type="number" class="small"> <button class="smallButton">set</button></div>
+			<div class="lab0_row"><H1>R2:</H1><input placeholder="set R2 radius"  type="number" class="big"> <button class="bigButton">set</button></div>
+		</div>
+		<div class="lab1">
+			<h1>lab 1, rotate:</h1>
+			<button class="centerCoords">set Z point by cursor</button>
+			<h1>or</h1>
+			<h1>Set Z Point by Coords:</h1>
+			<input class='centerX' placeholder="set X">
+			<input class='centerY' placeholder="set Y">
+			<button class="setXY">set Z point</button>
+			<H1>angle for rotation:</H1><input placeholder="" value="90" type="number" class="rotateAngle">
+			<button class="rotate">click to rotate</button>
+			<br>
+			<h1>move detail by pixel:</h1>
+			<div>
+				<h1>X:</h1><input placeholder="value on X axis" class="moveOnXaxis">
+				<h1>Y:</h1><input placeholder="value on Y axis" class="moveOnYaxis">
+			</div>
+			<button class="moveByXY">move by values</button>
+
+		</div>
+		<div class="pic">
+			<img class="illustration" src="pic2.png" height="200px">
+		</div>
+	</div>
+	
 </body>
 </html>
