@@ -6,12 +6,17 @@
 	<link rel="stylesheet" href="./main.css"></style>
 </head>
 <body style="margin: 0">
-	<input placeholder="set big radius"  type="number" class="big"> <button class="bigButton">set</button>
-	<input placeholder="set small radius" type="number" class="small"> <button class="smallButton">set</button>
-	<!-- <button class="moveState">allow move of detail on click</button> -->
+	<div class="kek">
+		
+		<h1>R1:</h1><input placeholder="set R1 radius" type="number" class="small"> <button class="smallButton">set</button>
+		<H1>R2:</H1><input placeholder="set R2 radius"  type="number" class="big"> <button class="bigButton">set</button>
+		<button class="centerCoords">stop changing XY point</button>
+		<H1>angle for rotation:</H1><input placeholder="" value="90" type="number" class="rotateAngle">
+		<button class="rotate">click to rotate</button>
+	</div>
 	<div class="row">
 		<canvas id="cv" style="display: block;" width="800" height="300">sss</canvas>
-		<img src="pic.png">
+		<img src="pic2.png">
 	</div>
 </body>
 </html>

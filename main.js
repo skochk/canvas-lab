@@ -16,18 +16,8 @@ document.addEventListener('DOMContentLoaded',function(){
 
     let moveOnClick = false;
 
-    //old move version
 
-    // document.querySelector('.moveState').addEventListener('click',function(){
-    //     moveOnClick = !moveOnClick; //change to opposite state
-    //     if(moveOnClick){
-    //         document.querySelector('.moveState').innerHTML = 'disable move of detail on click';
-    //     }else{
-    //         document.querySelector('.moveState').innerHTML = 'allow move of detail on click'; 
-    //     }
-    //     console.log(moveOnClick);
-    // });
-
+    //move figure
     canvas.addEventListener('mousedown',function(e){
         if((e.clientX > figurePos.x - 70 &&  e.clientY > figurePos.y -50)&&
            (e.clientX < figurePos.x + 70 &&  e.clientY < figurePos.y +100)
@@ -38,10 +28,7 @@ document.addEventListener('DOMContentLoaded',function(){
     canvas.addEventListener('mouseup',function(){
         moveOnClick = false;
     })
-
-
     canvas.addEventListener('mousemove', async function(e){
-        // canvas.addEventListener('click',function(e){
             if(moveOnClick == true){
                 context.clearRect(0, 0, canvas.width, canvas.height);
                 let a = calcArray(smallRadius,bigRadius);
@@ -50,8 +37,50 @@ document.addEventListener('DOMContentLoaded',function(){
                 figurePos.y = e.clientY;
                 print(a);
             }
-        // });
     });
+    let changingPoint = true;
+    let rotationCenter = {
+        x: 150,
+        y: 150
+    }
+    document.querySelector('.centerCoords').addEventListener('click',function(){
+        changingPoint = !changingPoint;
+        console.log(changingPoint);
+        if(!changingPoint){
+            document.querySelector('.centerCoords').innerHTML = "click to change XY point";
+        }else{
+            document.querySelector('.centerCoords').innerHTML = "stop changing XY point";
+        }
+    }); 
+
+    // set Z point
+    canvas.addEventListener('click',function(e){
+        if(changingPoint){
+            rotationCenter.x = e.clientX;
+            rotationCenter.y = e.clientY;
+            context.clearRect(0, 0, canvas.width, canvas.height);
+            drawGrid();
+            let array = calcArray(smallRadius,bigRadius);
+            print(array);
+            drawPoint(rotationCenter.x,rotationCenter.y);
+            
+        }
+    });
+
+    //rotate
+    document.querySelector('.rotate').addEventListener('click', function(){
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        drawGrid();
+        let array = calcArray(smallRadius,bigRadius);
+        let angle = document.querySelector('.rotateAngle').value;
+        let temp = document.querySelector('.rotateAngle').value;
+        document.querySelector('.rotateAngle').value = 5 + parseInt(temp);
+        let newArray =  rotateArray(array,angle,rotationCenter.x,rotationCenter.y);
+        print(newArray);
+        drawPoint(rotationCenter.x,rotationCenter.y);
+    
+    });
+   
 
 
     
@@ -146,7 +175,24 @@ document.addEventListener('DOMContentLoaded',function(){
 
     }
 
+    function rotateArray(array,angle,centerX,centerY){
+        angle = angle * Math.PI / 180;
+        let newX, newY;
+        let newArr = [];
+        for(let i = 0; i<array.length; i++){
 
+            newX = centerX + (array[i][0] - centerX) * Math.cos(angle) - (array[i][1] - centerY) * Math.sin(angle);
+            newY = centerY + (array[i][1] - centerY) * Math.cos(angle) + (array[i][0] - centerX) * Math.sin(angle);
+            
+            if(array[i][2]){
+                newArr.push([newX,newY,"move"]);
+            }else{
+                newArr.push([newX,newY]);
+            }
+        }   
+        console.log(newArr);
+        return newArr;
+    }
 
     function drawGrid(){
         context.beginPath();
@@ -158,7 +204,7 @@ document.addEventListener('DOMContentLoaded',function(){
             context.lineWidth = 1;
             context.strokeStyle = "black";
             context.moveTo(i,0);
-            context.fillText((i-0.5)/10,i+5,10);
+            context.fillText((i-0.5)/10,i+10,15);
             context.lineTo(i,canvas.offsetHeight);
             context.stroke();
         }
@@ -170,7 +216,7 @@ document.addEventListener('DOMContentLoaded',function(){
             context.lineWidth = 1;
             context.strokeStyle = "black";
             context.moveTo(0,i);
-            context.fillText((i-0.5)/10,1,i+10);
+            context.fillText((i-0.5)/10,10,i+10);
             context.lineTo(canvas.offsetWidth,i);
             context.stroke();
         }
@@ -181,26 +227,36 @@ document.addEventListener('DOMContentLoaded',function(){
 			context.textAlign = "center";
 			
 			//Y Start line
-			context.lineWidth = 3;
+			context.lineWidth = 10;
 			context.strokeStyle = "black";
 			context.beginPath();
-			context.moveTo(20, 20);
-			context.lineTo(20, canvas.offsetHeight/1.1);
+			context.moveTo(0.5, 0);
+			context.lineTo(0.5, canvas.offsetHeight/1.1);
             context.stroke();
             context.fillText("Y",40, canvas.offsetHeight/1.1)
 
 
             //X Start line
-			context.lineWidth = 3;
+			context.lineWidth = 10;
 			context.strokeStyle = "black";
 			context.beginPath();
-			context.moveTo(19, 20);
-			context.lineTo(canvas.offsetWidth/1.1, 20);
+			context.moveTo(0, 0);
+			context.lineTo(canvas.offsetWidth/1.1, 0);
             context.stroke();
             context.fillText("X",canvas.offsetWidth/1.1, 50)
 
 			
 
+    }
+    
+    function drawPoint(x,y){
+        //center of axis of rotation
+        context.beginPath();
+        context.arc(x, y-35.65, 5, 0, 2 * Math.PI);
+        context.font = "20px Arial";
+        context.fillText('Z',x+20,y-25);
+        context.fillStyle = "black";
+        context.fill();
     }
         
  
