@@ -9,27 +9,41 @@ document.addEventListener('DOMContentLoaded',function(){
         x: 150,
         y: 150,
     }
-  
-    drawGrid();
-    let a = calcArray(smallRadius,bigRadius);
-    print(a);
+    
+    
+    let changingPoint = false;
+    let rotationCenter = {
+        x: 150,
+        y: 150
+    }
+
+    let gridArray = drawGrid();
+    
+    print(gridArray,1);
+    let arrayGlobal = calcArray(smallRadius,bigRadius);
+    print(arrayGlobal);
 
     let moveOnClick = false;
 
-    //button of moving by axis
+    //move figure by axis values
     document.querySelector('.moveByXY').addEventListener('click',function(){
         context.clearRect(0, 0, canvas.width, canvas.height);
         drawGrid();
         let addToX = document.querySelector('.moveOnXaxis').value;
         let addToY = document.querySelector('.moveOnYaxis').value;
         if(addToX){
-            figurePos.x += parseInt(addToX);
+            figurePos.x += Number(addToX);
+            for(let i = 0; i<arrayGlobal.length; i++){
+                arrayGlobal[i][0] += Number(addToX);
+            }
         }
         if(addToY){
-            figurePos.y += parseInt(addToY);
+            figurePos.y += Number(addToY);
+            for(let i = 0; i<arrayGlobal.length; i++){
+                arrayGlobal[i][1] += Number(addToY);
+            }
         }
-        let a = calcArray(smallRadius,bigRadius);
-        print(a);
+        print(arrayGlobal);
     })
 
     //move figure by cursor
@@ -44,21 +58,34 @@ document.addEventListener('DOMContentLoaded',function(){
         moveOnClick = false;
     })
     canvas.addEventListener('mousemove', async function(e){
-            if(moveOnClick == true){
-                context.clearRect(0, 0, canvas.width, canvas.height);
-                let a = calcArray(smallRadius,bigRadius);
-                drawGrid();
-                figurePos.x = e.clientX;
-                figurePos.y = e.clientY;
-                print(a);
+        if(moveOnClick == true){
+            if(e.clientX > figurePos.x){
+                for(let i = 0; i<arrayGlobal.length; i++){
+                    arrayGlobal[i][0] += Number(e.clientX - figurePos.x);
+                }
+            }else{
+                for(let i = 0; i<arrayGlobal.length; i++){
+                    arrayGlobal[i][0] -= Number(figurePos.x - e.clientX);
+                }
             }
+            if(e.clientY > figurePos.y){
+                for(let i = 0; i<arrayGlobal.length; i++){
+                    arrayGlobal[i][1] += Number(e.clientY - figurePos.y);
+                }
+            }else{
+                for(let i = 0; i<arrayGlobal.length; i++){
+                    arrayGlobal[i][1] -= Number(figurePos.y - e.clientY);
+                }
+            }
+            context.clearRect(0, 0, canvas.width, canvas.height);
+            drawGrid();
+            figurePos.x = e.clientX;
+            figurePos.y = e.clientY;
+            print(arrayGlobal);
+            
+        }
     });
 
-    let changingPoint = false;
-    let rotationCenter = {
-        x: 150,
-        y: 150
-    }
 
     //change text of button
     document.querySelector('.centerCoords').addEventListener('click',function(){
@@ -92,18 +119,18 @@ document.addEventListener('DOMContentLoaded',function(){
         drawGrid();
         let array = calcArray(smallRadius,bigRadius);
         print(array);
-        drawPoint(parseInt(rotationCenter.x),parseInt(rotationCenter.y));
+        drawPoint(Number(rotationCenter.x),Number(rotationCenter.y));
     })
 
     //rotate
     document.querySelector('.rotate').addEventListener('click', function(){
         context.clearRect(0, 0, canvas.width, canvas.height);
         drawGrid();
-        let array = calcArray(smallRadius,bigRadius);
         let angle = document.querySelector('.rotateAngle').value;
         let temp = document.querySelector('.rotateAngle').value;
-        document.querySelector('.rotateAngle').value = 5 + parseInt(temp);
-        let newArray =  rotateArray(array,angle,rotationCenter.x,rotationCenter.y);
+        document.querySelector('.rotateAngle').value = 5 + Number(temp);
+        let newArray =  rotateArray(arrayGlobal,angle,rotationCenter.x,rotationCenter.y);
+        arrayGlobal = newArray;
         print(newArray);
         drawPoint(rotationCenter.x,rotationCenter.y);
     
@@ -134,38 +161,40 @@ document.addEventListener('DOMContentLoaded',function(){
     document.querySelector('.affineCall').addEventListener('click',function(){
         let affineArray = [];
         let items = document.querySelectorAll('.affineElement');
-       
         for(let i = 0; i < items.length; i++){
-            if(!items[i].value){
+            if(items[i].value === ""){
                 affineArray.push(0);
             }else{
-                affineArray.push(parseInt(items[i].value));
+                affineArray.push(Number(items[i].value));
             }
         }
-
         //преобразование массива в двухмерный по 3 эл.
         let row1 = affineArray.slice(0,3);
         let row2 = affineArray.slice(3,6);
         let row3 = affineArray.slice(6,9);
         affineArray = [];
         affineArray.push(row1,row2,row3);
-
+        console.log(affineArray);
 
         context.clearRect(0, 0, canvas.width, canvas.height);
-        drawGrid();
-        let array = calcArray(smallRadius,bigRadius);
-        
-        let newArr = affineCalc(array, affineArray);
-        console.log(newArr);
+        // drawGrid();
+        let newGrid = affineCalc(gridArray, affineArray);
+        print(newGrid,1);
+        let newArr = affineCalc(arrayGlobal, affineArray);
+        arrayGlobal = newArr;
         print(newArr);
 
     })
 
 
 
-    function print(a){
+    function print(a, lineWidth){
         context.beginPath();
         context.lineWidth = 5;
+        if(lineWidth){
+            context.lineWidth = 1;
+            context.strokeStyle = "black";
+        }
         for(let i = 0; i < a.length; i++){
             if(a[i][2] == "move"){
                 context.moveTo(a[i][0],a[i][1]);
@@ -252,6 +281,7 @@ document.addEventListener('DOMContentLoaded',function(){
     }
 
     function drawGrid(){
+        let gridArray = [[0,0],'move'];
         context.beginPath();
         context.lineWidth = 1;
         context.font = "10px Segoe UI";
@@ -263,8 +293,11 @@ document.addEventListener('DOMContentLoaded',function(){
             context.moveTo(i,0);
             context.font = "8px Arial";
             context.fillText((i-0.5),i+5,15);
-            context.lineTo(i,canvas.offsetHeight);
+            //context.lineTo(i,canvas.offsetHeight);
             context.stroke();
+
+            gridArray.push([i,0,"move"]);
+            gridArray.push([i,canvas.offsetHeight])
         }
         context.closePath();
         // horizontal grid loop
@@ -276,8 +309,11 @@ document.addEventListener('DOMContentLoaded',function(){
             context.moveTo(0,i);
             context.font = "8px Arial";
             context.fillText((i-0.5),8,i+10);
-            context.lineTo(canvas.offsetWidth,i);
+            // context.lineTo(canvas.offsetWidth,i);
             context.stroke();
+
+            gridArray.push([0,i,'move']);
+            gridArray.push([canvas.offsetWidth,i]);
         }
         context.closePath();
 
@@ -305,7 +341,7 @@ document.addEventListener('DOMContentLoaded',function(){
             context.fillText("X",canvas.offsetWidth/1.1, 50)
 
 			
-
+        return gridArray;
     }
     
     function drawPoint(x,y){
