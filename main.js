@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded',function(){
 
     let moveOnClick = false;
 
-    
+    //button of moving by axis
     document.querySelector('.moveByXY').addEventListener('click',function(){
         context.clearRect(0, 0, canvas.width, canvas.height);
         drawGrid();
@@ -60,6 +60,7 @@ document.addEventListener('DOMContentLoaded',function(){
         y: 150
     }
 
+    //change text of button
     document.querySelector('.centerCoords').addEventListener('click',function(){
         changingPoint = !changingPoint;
         console.log(changingPoint);
@@ -111,7 +112,7 @@ document.addEventListener('DOMContentLoaded',function(){
 
 
     
-
+    //change radius
     document.querySelector('.smallButton').addEventListener('click',async function(){
         smallRadius = document.querySelector('.small').value;
         await context.clearRect(0, 0, canvas.width, canvas.height);
@@ -120,13 +121,43 @@ document.addEventListener('DOMContentLoaded',function(){
         await print(a);
         
     });
-
     document.querySelector('.bigButton').addEventListener('click', async function(){
         bigRadius = document.querySelector('.big').value;
         await context.clearRect(0, 0, canvas.width, canvas.height);
         let a = await calcArray(smallRadius,bigRadius);
         await drawGrid();
         await print(a);
+
+    })
+
+    //calculate affine 
+    document.querySelector('.affineCall').addEventListener('click',function(){
+        let affineArray = [];
+        let items = document.querySelectorAll('.affineElement');
+       
+        for(let i = 0; i < items.length; i++){
+            if(!items[i].value){
+                affineArray.push(0);
+            }else{
+                affineArray.push(parseInt(items[i].value));
+            }
+        }
+
+        //преобразование массива в двухмерный по 3 эл.
+        let row1 = affineArray.slice(0,3);
+        let row2 = affineArray.slice(3,6);
+        let row3 = affineArray.slice(6,9);
+        affineArray = [];
+        affineArray.push(row1,row2,row3);
+
+
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        drawGrid();
+        let array = calcArray(smallRadius,bigRadius);
+        
+        let newArr = affineCalc(array, affineArray);
+        console.log(newArr);
+        print(newArr);
 
     })
 
@@ -287,9 +318,26 @@ document.addEventListener('DOMContentLoaded',function(){
         context.fillStyle = "black";
         context.fill();
     }
-        
+    
+    function multipleMatrix(row,affineArray){
+        let tempArray  = [];
+        var row1 = affineArray[0][0] * row[0] + affineArray[0][1] * row [1] + affineArray[0][2] * 0;
+        var row2 = affineArray[1][0] * row[0] + affineArray[1][1] * row [1] + affineArray[1][2] * 0;
+        var row3 = affineArray[2][0] * row[0] + affineArray[2][1] * row [1] + affineArray[2][2] * 0;
+        if(row[2]== "move"){
+            row3 = "move";
+        }
+        tempArray.push(row1, row2, row3);
+        return tempArray;
+    }
 
-    // document.querySelector('.pic').addEventListener('click',function(){
-    //     document.querySelector('img').style.display = "none";
-    // })
+    function affineCalc(array, affineArray){
+        let newArray = [];
+        for(let i = 0; i< array.length; i++){
+            let temp = multipleMatrix(array[i],affineArray);
+            newArray.push(temp);
+
+        }
+        return newArray;
+    }
 });

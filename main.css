@@ -19,7 +19,7 @@ h1{
     padding: 0;
     width: 1000px;
 }
-.lab0, .lab1{
+.lab0, .lab1, affine{
     display: flex;
     align-items: center;
     flex-direction: column;
@@ -29,4 +29,8 @@ h1{
 
 .lab0_row{
     display: flex;
+}
+
+.affineElement{
+    width: 50px;
 }
