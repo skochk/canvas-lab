@@ -27,10 +27,15 @@ h1{
     margin-right: 50px;
 }
 
+
 .lab0_row{
     display: flex;
 }
 
-.affineElement{
+.affineElement , .projectiveElement{
     width: 50px;
+}
+
+.projective{
+    margin-left: 20px;
 }

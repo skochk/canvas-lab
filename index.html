@@ -16,7 +16,7 @@
 			<div class="lab0_row"><H1>R2:</H1><input placeholder="set R2 radius"  type="number" class="big"> <button class="bigButton">set</button></div>
 		</div>
 		<div class="lab1">
-			<h1>lab 1, rotate:</h1>
+			<h1>rotate:</h1>
 			<button class="centerCoords">set Z point by cursor</button>
 			<h1>or</h1>
 			<h1>Set Z Point by Coords:</h1>
@@ -36,7 +36,7 @@
 		</div>
 
 		<div class="affine">
-			<h1>lab 1, affine:</h1>
+			<h1>affine:</h1>
 			<div class="lab0_row">
 				<input type="text" class="affineElement">
 				<input type="text" class="affineElement">
@@ -53,6 +53,26 @@
 				<input class="affineElement"value="1" readonly>
 			</div>
 			<button class="affineCall">calc affine</button>
+		</div>
+
+		<div class="projective">
+			<h1>projective:</h1>
+			<div class="lab0_row">
+				<input class="projectiveElement" placeholder="Xx">
+				<input class="projectiveElement" placeholder="Xy">
+				<input class="projectiveElement" placeholder="X0">
+			</div>
+			<div class="lab0_row">
+				<input class="projectiveElement" placeholder="Yx">
+				<input class="projectiveElement" placeholder="Yy">
+				<input class="projectiveElement" placeholder="Y0">
+			</div>
+			<div class="lab0_row">
+				<input class="projectiveElement" placeholder="Wx">
+				<input class="projectiveElement" placeholder="Wy">
+				<input class="projectiveElement" placeholder="W0">
+			</div>
+			<button class="projectiveCall">calc projective</button>
 		</div>
 		<div class="pic">
 			<img class="illustration" src="pic2.png" height="200px">

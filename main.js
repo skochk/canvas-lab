@@ -17,9 +17,9 @@ document.addEventListener('DOMContentLoaded',function(){
         y: 150
     }
 
-    let gridArray = drawGrid();
+    let gridGlobal = drawGrid();
     
-    print(gridArray,1);
+    print(gridGlobal,1);
     let arrayGlobal = calcArray(smallRadius,bigRadius);
     print(arrayGlobal);
 
@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded',function(){
     //move figure by axis values
     document.querySelector('.moveByXY').addEventListener('click',function(){
         context.clearRect(0, 0, canvas.width, canvas.height);
-        drawGrid();
+        print(gridGlobal,1);
         let addToX = document.querySelector('.moveOnXaxis').value;
         let addToY = document.querySelector('.moveOnYaxis').value;
         if(addToX){
@@ -78,7 +78,7 @@ document.addEventListener('DOMContentLoaded',function(){
                 }
             }
             context.clearRect(0, 0, canvas.width, canvas.height);
-            drawGrid();
+            print(gridGlobal,1);
             figurePos.x = e.clientX;
             figurePos.y = e.clientY;
             print(arrayGlobal);
@@ -104,9 +104,8 @@ document.addEventListener('DOMContentLoaded',function(){
             rotationCenter.x = e.clientX;
             rotationCenter.y = e.clientY;
             context.clearRect(0, 0, canvas.width, canvas.height);
-            drawGrid();
-            let array = calcArray(smallRadius,bigRadius);
-            print(array);
+            print(gridGlobal,1);
+            print(arrayGlobal);
             drawPoint(rotationCenter.x,rotationCenter.y);
             
         }
@@ -116,7 +115,7 @@ document.addEventListener('DOMContentLoaded',function(){
         rotationCenter.x = document.querySelector('.centerX').value;
         rotationCenter.y = document.querySelector('.centerY').value;
         context.clearRect(0, 0, canvas.width, canvas.height);
-        drawGrid();
+        print(gridGlobal,1);
         let array = calcArray(smallRadius,bigRadius);
         print(array);
         drawPoint(Number(rotationCenter.x),Number(rotationCenter.y));
@@ -125,7 +124,7 @@ document.addEventListener('DOMContentLoaded',function(){
     //rotate
     document.querySelector('.rotate').addEventListener('click', function(){
         context.clearRect(0, 0, canvas.width, canvas.height);
-        drawGrid();
+        print(gridGlobal,1);
         let angle = document.querySelector('.rotateAngle').value;
         let temp = document.querySelector('.rotateAngle').value;
         document.querySelector('.rotateAngle').value = 5 + Number(temp);
@@ -136,27 +135,6 @@ document.addEventListener('DOMContentLoaded',function(){
     
     });
    
-
-
-    
-    //change radius
-    document.querySelector('.smallButton').addEventListener('click',async function(){
-        smallRadius = document.querySelector('.small').value;
-        await context.clearRect(0, 0, canvas.width, canvas.height);
-        let a = await calcArray(smallRadius,bigRadius);
-        await drawGrid();
-        await print(a);
-        
-    });
-    document.querySelector('.bigButton').addEventListener('click', async function(){
-        bigRadius = document.querySelector('.big').value;
-        await context.clearRect(0, 0, canvas.width, canvas.height);
-        let a = await calcArray(smallRadius,bigRadius);
-        await drawGrid();
-        await print(a);
-
-    })
-
     //calculate affine 
     document.querySelector('.affineCall').addEventListener('click',function(){
         let affineArray = [];
@@ -174,15 +152,52 @@ document.addEventListener('DOMContentLoaded',function(){
         let row3 = affineArray.slice(6,9);
         affineArray = [];
         affineArray.push(row1,row2,row3);
-        console.log(affineArray);
 
         context.clearRect(0, 0, canvas.width, canvas.height);
-        // drawGrid();
-        let newGrid = affineCalc(gridArray, affineArray);
-        print(newGrid,1);
+        let newGrid = affineCalc(gridGlobal, affineArray);
         let newArr = affineCalc(arrayGlobal, affineArray);
         arrayGlobal = newArr;
+        gridGlobal = newGrid;
+        print(gridGlobal,1);
         print(newArr);
+
+    })
+
+    //calcuate projective
+    document.querySelector('.projectiveCall').addEventListener('click',function(){
+        let projectiveArray = [];
+        let items = document.querySelectorAll('.projectiveElement');
+        projectiveArray = [ 
+            [Number(items[0].value) * Number(items[6].value) /*=Wx*/, Number(items[3].value) * Number(items[6].value), Number(items[6].value)],
+            [Number(items[1].value) * Number(items[7].value), Number(items[4].value) * Number(items[7].value),  Number(items[7].value)],
+            [Number(items[2].value) * Number(items[8].value), Number(items[5].value) * Number(items[8].value),  Number(items[8].value)],
+        ];  
+      
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        
+        // let newGrid = projectiveCalc(gridGlobal, projectiveArray);
+        let newArr = projectiveCalc(arrayGlobal, projectiveArray);
+        arrayGlobal = newArr;
+        // gridGlobal = newGrid;
+        // print(gridGlobal,1);
+        print(newArr);
+    })
+
+    //change radius
+    document.querySelector('.smallButton').addEventListener('click',async function(){
+        smallRadius = document.querySelector('.small').value;
+        await context.clearRect(0, 0, canvas.width, canvas.height);
+        let a = await calcArray(smallRadius,bigRadius);
+        await print(gridGlobal,1);
+        await print(a);
+        
+    });
+    document.querySelector('.bigButton').addEventListener('click', async function(){
+        bigRadius = document.querySelector('.big').value;
+        await context.clearRect(0, 0, canvas.width, canvas.height);
+        let a = await calcArray(smallRadius,bigRadius);
+        await print(gridGlobal,1);
+        await print(a);
 
     })
 
@@ -190,9 +205,10 @@ document.addEventListener('DOMContentLoaded',function(){
 
     function print(a, lineWidth){
         context.beginPath();
+        console.log(a);
         context.lineWidth = 5;
         if(lineWidth){
-            context.lineWidth = 1;
+            context.lineWidth = lineWidth;
             context.strokeStyle = "black";
         }
         for(let i = 0; i < a.length; i++){
@@ -276,12 +292,11 @@ document.addEventListener('DOMContentLoaded',function(){
                 newArr.push([newX,newY]);
             }
         }   
-        console.log(newArr);
         return newArr;
     }
 
     function drawGrid(){
-        let gridArray = [[0,0],'move'];
+        let gridGlobal = [[0,0],'move'];
         context.beginPath();
         context.lineWidth = 1;
         context.font = "10px Segoe UI";
@@ -296,8 +311,8 @@ document.addEventListener('DOMContentLoaded',function(){
             //context.lineTo(i,canvas.offsetHeight);
             context.stroke();
 
-            gridArray.push([i,0,"move"]);
-            gridArray.push([i,canvas.offsetHeight])
+            gridGlobal.push([i,0,"move"]);
+            gridGlobal.push([i,canvas.offsetHeight])
         }
         context.closePath();
         // horizontal grid loop
@@ -312,8 +327,8 @@ document.addEventListener('DOMContentLoaded',function(){
             // context.lineTo(canvas.offsetWidth,i);
             context.stroke();
 
-            gridArray.push([0,i,'move']);
-            gridArray.push([canvas.offsetWidth,i]);
+            gridGlobal.push([0,i,'move']);
+            gridGlobal.push([canvas.offsetWidth,i]);
         }
         context.closePath();
 
@@ -341,7 +356,7 @@ document.addEventListener('DOMContentLoaded',function(){
             context.fillText("X",canvas.offsetWidth/1.1, 50)
 
 			
-        return gridArray;
+        return gridGlobal;
     }
     
     function drawPoint(x,y){
@@ -374,6 +389,35 @@ document.addEventListener('DOMContentLoaded',function(){
             newArray.push(temp);
 
         }
+        return newArray;
+    }
+
+    function multipleMatrixPrj(row,projectiveArray){
+        let tempArray  = [];
+        var row1 = projectiveArray[0][0] * row[0] + projectiveArray[0][1] * row [1] + projectiveArray[0][2] * 1;
+        var row2 = projectiveArray[1][0] * row[0] + projectiveArray[1][1] * row [1] + projectiveArray[1][2] * 1;
+        var row3 = projectiveArray[2][0] * row[0] + projectiveArray[2][1] * row [1] + projectiveArray[2][2] * 1;
+        if(row[2]){
+            tempArray.push(row1, row2, row3, "move");
+        }else{
+            tempArray.push(row1, row2, row3);
+        }
+        
+        return tempArray;
+    }  
+    
+
+    function projectiveCalc(array, projectiveArray){
+        let newArray = [];
+            for(let i = 0; i< array.length; i++){
+                let temp = multipleMatrixPrj(array[i],projectiveArray);
+                let makeSmallerCoords = temp[2];
+                console.log("before: " +temp[0] + " delimeter: " + makeSmallerCoords);
+                    temp[0] = temp[0] /makeSmallerCoords;
+                    temp[1] = temp[1] /makeSmallerCoords;
+                console.log("after: " +temp[0]);
+                newArray.push(temp);
+            }
         return newArray;
     }
 });
