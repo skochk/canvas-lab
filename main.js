@@ -167,16 +167,20 @@ document.addEventListener('DOMContentLoaded',function(){
     document.querySelector('.projectiveCall').addEventListener('click',function(){
         let projectiveArray = [];
         let items = document.querySelectorAll('.projectiveElement');
+        
+
         projectiveArray = [ 
             [Number(items[0].value) * Number(items[6].value) /*=Wx*/, Number(items[3].value) * Number(items[6].value), Number(items[6].value)],
             [Number(items[1].value) * Number(items[7].value), Number(items[4].value) * Number(items[7].value),  Number(items[7].value)],
             [Number(items[2].value) * Number(items[8].value), Number(items[5].value) * Number(items[8].value),  Number(items[8].value)],
         ];  
-      
+    
+-      
         context.clearRect(0, 0, canvas.width, canvas.height);
         
         // let newGrid = projectiveCalc(gridGlobal, projectiveArray);
         let newArr = projectiveCalc(arrayGlobal, projectiveArray);
+        // let newArr = testCalc(arrayGlobal);
         arrayGlobal = newArr;
         // gridGlobal = newGrid;
         // print(gridGlobal,1);
@@ -201,9 +205,37 @@ document.addEventListener('DOMContentLoaded',function(){
 
     })
 
+    // function testCalc(array){
+    //     let items = document.querySelectorAll('.projectiveElement');
+    //     let Xx = items[0].value;
+    //     let Xy = items[1].value;
+    //     let X0 = items[2].value;
+    //     let Yx = items[3].value;
+    //     let Yy = items[4].value;
+    //     let Y0 = items[5].value;
+    //     let Wx = items[6].value;
+    //     let Wy = items[7].value;
+    //     let W0 = items[8].value;
+    //     let x;
+    //     let y;
+    //     let tempArray = [];
 
+    //     for(let i = 0; i< array.length; i++){
+    //         x = (X0 * W0 + Xx * Wx * array[i][0] + Xy * Wy * array[i][1]) / (W0 + Wx * array[i][0] +  Wy* array[i][1]);
+    //         y = (Y0 * W0 + Yx * Wx * array[i][0] + Yy * Wy * array[i][1]) / (W0 + Wx * array[i][0] +  Wy* array[i][1]);
+    //         console.log(x,y);
+    //         if(array[2] == "move"){
+    //             tempArray.push(x, y, "move");
+    //         }
+    //         else{
+    //             tempArray.push(x, y);
+    //         }
+    //     }
 
-    function print(a, lineWidth){
+    // }
+
+    function print(a, lineWidth,boolIndicator=false){
+        // if boolIndicator true means array=[3,3]
         context.beginPath();
         console.log(a);
         context.lineWidth = 5;
@@ -211,6 +243,19 @@ document.addEventListener('DOMContentLoaded',function(){
             context.lineWidth = lineWidth;
             context.strokeStyle = "black";
         }
+        if(boolIndicator){
+            for(let i = 0; i < a.length; i++){
+                if(a[i][3] == "move"){
+                    context.moveTo(a[i][0],a[i][1]);
+                    context.lineTo(a[i][0],a[i][1]);
+                }else{
+                    context.lineTo(a[i][0],a[i][1]);
+                    context.stroke();
+                }
+                context.stroke();
+            }
+            context.stroke();
+        }else{
         for(let i = 0; i < a.length; i++){
             if(a[i][2] == "move"){
                 context.moveTo(a[i][0],a[i][1]);
@@ -222,7 +267,7 @@ document.addEventListener('DOMContentLoaded',function(){
             context.stroke();
         }
         context.stroke();
-
+        }
     }
 
     function calcArray(smallRadius,bigRadius){
@@ -393,20 +438,21 @@ document.addEventListener('DOMContentLoaded',function(){
     }
 
     function multipleMatrixPrj(row,projectiveArray){
-        let tempArray  = [];
+        let tempRow  = [];
         var row1 = projectiveArray[0][0] * row[0] + projectiveArray[0][1] * row [1] + projectiveArray[0][2] * 1;
         var row2 = projectiveArray[1][0] * row[0] + projectiveArray[1][1] * row [1] + projectiveArray[1][2] * 1;
         var row3 = projectiveArray[2][0] * row[0] + projectiveArray[2][1] * row [1] + projectiveArray[2][2] * 1;
         if(row[2]){
-            tempArray.push(row1, row2, row3, "move");
+            tempRow.push(row1, row2, row3, "move");
         }else{
-            tempArray.push(row1, row2, row3);
+            tempRow.push(row1, row2, row3);
         }
         
-        return tempArray;
+        return tempRow;
     }  
     
 
+    
     function projectiveCalc(array, projectiveArray){
         let newArray = [];
             for(let i = 0; i< array.length; i++){
